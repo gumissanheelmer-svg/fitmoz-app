@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Clock, ChevronRight } from "lucide-react";
+import { Clock, ChevronRight, Play } from "lucide-react";
+import PostWorkoutDialog from "@/components/PostWorkoutDialog";
 
 const levels = ["Iniciante", "Intermediário", "Avançado"] as const;
 
@@ -14,7 +15,13 @@ const workouts = [
 
 const Treinos = () => {
   const [selected, setSelected] = useState<(typeof levels)[number]>("Iniciante");
+  const [showPostWorkout, setShowPostWorkout] = useState(false);
   const filtered = workouts.filter((w) => w.nivel === selected);
+
+  const handleStartWorkout = () => {
+    // Simulate completing a workout
+    setShowPostWorkout(true);
+  };
 
   return (
     <div className="animate-fade-in space-y-5 p-5">
@@ -43,9 +50,10 @@ const Treinos = () => {
       {/* Workout List */}
       <div className="space-y-3">
         {filtered.map((w) => (
-          <div
+          <button
             key={w.id}
-            className="animate-slide-up flex items-center gap-4 rounded-xl border border-border bg-card p-4 transition-colors hover:bg-muted"
+            onClick={handleStartWorkout}
+            className="animate-slide-up flex w-full items-center gap-4 rounded-xl border border-border bg-card p-4 text-left transition-colors hover:bg-muted"
           >
             <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-secondary">
               <Clock className="h-5 w-5 text-primary" />
@@ -55,10 +63,12 @@ const Treinos = () => {
               <p className="text-sm text-muted-foreground">{w.descricao}</p>
               <p className="mt-1 text-xs font-semibold text-primary">{w.duracao}</p>
             </div>
-            <ChevronRight className="h-5 w-5 text-muted-foreground" />
-          </div>
+            <Play className="h-5 w-5 text-primary" fill="currentColor" />
+          </button>
         ))}
       </div>
+
+      <PostWorkoutDialog open={showPostWorkout} onOpenChange={setShowPostWorkout} />
     </div>
   );
 };

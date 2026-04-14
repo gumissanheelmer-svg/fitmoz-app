@@ -1,8 +1,8 @@
-import { Crown, Star, ChevronRight, LogOut, Settings, Shield } from "lucide-react";
+import { Crown, Star, ChevronRight, LogOut, Settings, Shield, Calendar } from "lucide-react";
+import { usePlan } from "@/hooks/usePlan";
 
 const Perfil = () => {
-  const plan = "plus" as "plus" | "pro";
-  const status = "ativo";
+  const { plan, setPlan, status, expiresAt } = usePlan();
 
   return (
     <div className="animate-fade-in space-y-6 p-5">
@@ -32,13 +32,20 @@ const Perfil = () => {
           <span className="text-sm font-semibold text-muted-foreground">Plano Atual</span>
         </div>
         <p className="text-2xl font-extrabold uppercase text-foreground">{plan}</p>
-        <p className="mb-4 text-sm text-muted-foreground">
+        <p className="text-sm text-muted-foreground">
           {plan === "plus" ? "97 MZN/mês" : "147 MZN/mês"} · Status:{" "}
           <span className="font-semibold text-primary">{status}</span>
         </p>
+        <div className="mt-2 flex items-center gap-1.5 text-xs text-muted-foreground">
+          <Calendar className="h-3.5 w-3.5" />
+          <span>Expira em: {expiresAt}</span>
+        </div>
 
         {plan === "plus" && (
-          <button className="w-full rounded-xl bg-primary px-6 py-3.5 text-sm font-bold text-primary-foreground transition-transform active:scale-[0.98]">
+          <button
+            onClick={() => setPlan("pro")}
+            className="mt-4 w-full rounded-xl bg-primary px-6 py-3.5 text-sm font-bold text-primary-foreground transition-transform active:scale-[0.98]"
+          >
             Atualizar para PRO — 147 MZN
           </button>
         )}
