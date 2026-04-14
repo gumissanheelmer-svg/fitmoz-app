@@ -1,33 +1,48 @@
-// Centralized plan state — will be replaced with real auth/DB later
-import { useState, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "./useAuth";
 
 export type Plan = "plus" | "pro";
 export type PlanStatus = "ativo" | "teste" | "expirado";
 
-// Simple global state for now (no backend yet)
-let globalPlan: Plan = "plus";
-const listeners = new Set<() => void>();
-
 export const usePlan = () => {
-  const [, rerender] = useState(0);
+  const { user } = useAuth();
+  const [plan, setPlanState] = useState<Plan>("plus");
+  const [status, setStatus] = useState<PlanStatus>("teste");
+  const [expiresAt, setExpiresAt] = useState<string>("");
+  const [loading, setLoading] = useState(true);
 
-  const plan = globalPlan;
+  const fetchProfile = useCallback(async () => {
+    if (!user) return;
+    const { data } = await supabase
+      .from("profiles")
+      .select("plano, status, expira_em")
+      .eq("user_id", user.id)
+      .single();
 
-  const setPlan = useCallback((p: Plan) => {
-    globalPlan = p;
-    listeners.forEach((l) => l());
-  }, []);
+    if (data) {
+      setPlanState(data.plano);
+      setStatus(data.status);
+      setExpiresAt(data.expira_em ? new Date(data.expira_em).toLocaleDateString("pt-BR") : "");
+    }
+    setLoading(false);
+  }, [user]);
 
-  // Subscribe to changes
-  useState(() => {
-    const listener = () => rerender((n) => n + 1);
-    listeners.add(listener);
-    return () => listeners.delete(listener);
-  });
+  useEffect(() => {
+    fetchProfile();
+  }, [fetchProfile]);
+
+  const setPlan = useCallback(async (p: Plan) => {
+    if (!user) return;
+    await supabase
+      .from("profiles")
+      .update({ plano: p, status: "ativo" as const })
+      .eq("user_id", user.id);
+    setPlanState(p);
+    setStatus("ativo");
+  }, [user]);
 
   const isPro = plan === "pro";
-  const status: PlanStatus = "ativo";
-  const expiresAt = "2026-05-14";
 
-  return { plan, setPlan, isPro, status, expiresAt };
+  return { plan, setPlan, isPro, status, expiresAt, loading };
 };
