@@ -1,16 +1,71 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { Play, Share2, Flame, Trophy, Zap } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { Progress } from "@/components/ui/progress";
 
-// IMPORTANT: Fully REPLACE this with your own code
-const PlaceholderIndex = () => {
-  // PLACEHOLDER: Replace this entire return statement with the user's app.
-  // The inline background color is intentionally not part of the design system.
+const HomePage = () => {
+  const navigate = useNavigate();
+  const currentDay = 3;
+  const totalDays = 30;
+  const progress = (currentDay / totalDays) * 100;
+
   return (
-    <div className="flex min-h-screen items-center justify-center" style={{ backgroundColor: '#fcfbf8' }}>
-      <img data-lovable-blank-page-placeholder="REMOVE_THIS" src="/placeholder.svg" alt="Your app will live here!" />
+    <div className="animate-fade-in space-y-6 p-5">
+      {/* Header */}
+      <div className="pt-2">
+        <p className="text-sm font-medium text-muted-foreground">Olá, Atleta 💪</p>
+        <h1 className="text-2xl font-extrabold text-foreground">FitMoz</h1>
+      </div>
+
+      {/* Progress Card */}
+      <div className="fitness-gradient animate-slide-up rounded-2xl p-6 text-primary-foreground">
+        <div className="mb-1 flex items-center gap-2">
+          <Flame className="h-5 w-5" />
+          <span className="text-sm font-semibold opacity-90">Desafio 30 Dias</span>
+        </div>
+        <p className="mb-4 text-3xl font-extrabold">
+          Dia {currentDay}
+          <span className="text-lg font-semibold opacity-80">/{totalDays}</span>
+        </p>
+        <Progress value={progress} className="h-2.5 bg-primary-foreground/20 [&>div]:bg-primary-foreground" />
+        <p className="mt-2 text-xs font-medium opacity-80">{Math.round(progress)}% completo</p>
+      </div>
+
+      {/* Start Workout Button */}
+      <button
+        onClick={() => navigate("/treinos")}
+        className="flex w-full items-center justify-center gap-3 rounded-2xl bg-primary px-6 py-5 text-lg font-bold text-primary-foreground shadow-lg transition-transform active:scale-[0.98]"
+      >
+        <Play className="h-6 w-6" fill="currentColor" />
+        Começar Treino
+      </button>
+
+      {/* Stats Row */}
+      <div className="grid grid-cols-3 gap-3">
+        {[
+          { icon: Flame, label: "Calorias", value: "450" },
+          { icon: Trophy, label: "Streak", value: "3 dias" },
+          { icon: Zap, label: "Treinos", value: "12" },
+        ].map(({ icon: Icon, label, value }) => (
+          <div key={label} className="animate-slide-up rounded-xl bg-secondary p-4 text-center">
+            <Icon className="mx-auto mb-1 h-5 w-5 text-primary" />
+            <p className="text-lg font-bold text-foreground">{value}</p>
+            <p className="text-xs font-medium text-muted-foreground">{label}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* Share Card */}
+      <button className="flex w-full items-center gap-4 rounded-xl border border-border bg-card p-4 text-left transition-colors hover:bg-muted">
+        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-secondary">
+          <Share2 className="h-5 w-5 text-primary" />
+        </div>
+        <div>
+          <p className="font-bold text-foreground">Compartilhar progresso</p>
+          <p className="text-sm text-muted-foreground">Mostre sua evolução aos amigos</p>
+        </div>
+      </button>
     </div>
   );
 };
 
-const Index = PlaceholderIndex;
-
-export default Index;
+export default HomePage;
