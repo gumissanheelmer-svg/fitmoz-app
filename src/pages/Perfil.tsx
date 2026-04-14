@@ -1,7 +1,7 @@
 import { Crown, Star, ChevronRight, LogOut, Settings, Shield } from "lucide-react";
 
 const Perfil = () => {
-  const plan = "plus";
+  const plan: "plus" | "pro" = "plus";
   const status = "ativo";
 
   return (
