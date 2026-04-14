@@ -1,12 +1,25 @@
-import { Play, Share2, Flame, Trophy, Zap } from "lucide-react";
+import { Play, Users, Flame, Trophy, Zap } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Progress } from "@/components/ui/progress";
+import { usePlan } from "@/hooks/usePlan";
+import { useState } from "react";
+import UpgradeDialog from "@/components/UpgradeDialog";
 
 const HomePage = () => {
   const navigate = useNavigate();
+  const { isPro } = usePlan();
+  const [showUpgrade, setShowUpgrade] = useState(false);
   const currentDay = 3;
   const totalDays = 30;
   const progress = (currentDay / totalDays) * 100;
+
+  const handleShare = () => {
+    if (isPro) {
+      navigate("/comunidade");
+    } else {
+      setShowUpgrade(true);
+    }
+  };
 
   return (
     <div className="animate-fade-in space-y-6 p-5">
@@ -36,7 +49,7 @@ const HomePage = () => {
         className="flex w-full items-center justify-center gap-3 rounded-2xl bg-primary px-6 py-5 text-lg font-bold text-primary-foreground shadow-lg transition-transform active:scale-[0.98]"
       >
         <Play className="h-6 w-6" fill="currentColor" />
-        Começar Treino
+        COMEÇAR TREINO
       </button>
 
       {/* Stats Row */}
@@ -55,15 +68,24 @@ const HomePage = () => {
       </div>
 
       {/* Share Card */}
-      <button className="flex w-full items-center gap-4 rounded-xl border border-border bg-card p-4 text-left transition-colors hover:bg-muted">
+      <button
+        onClick={handleShare}
+        className="flex w-full items-center gap-4 rounded-xl border border-border bg-card p-4 text-left transition-colors hover:bg-muted"
+      >
         <div className="flex h-12 w-12 items-center justify-center rounded-full bg-secondary">
-          <Share2 className="h-5 w-5 text-primary" />
+          <Users className="h-5 w-5 text-primary" />
         </div>
         <div>
-          <p className="font-bold text-foreground">Compartilhar progresso</p>
+          <p className="font-bold text-foreground">Compartilhar com a comunidade</p>
           <p className="text-sm text-muted-foreground">Mostre sua evolução aos amigos</p>
         </div>
       </button>
+
+      <UpgradeDialog
+        open={showUpgrade}
+        onOpenChange={setShowUpgrade}
+        message="Compartilhe seu progresso e interaja com a comunidade."
+      />
     </div>
   );
 };

@@ -7,6 +7,7 @@ import AppLayout from "./components/AppLayout";
 import Index from "./pages/Index";
 import Treinos from "./pages/Treinos";
 import Receitas from "./pages/Receitas";
+import Comunidade from "./pages/Comunidade";
 import Progresso from "./pages/Progresso";
 import Perfil from "./pages/Perfil";
 import NotFound from "./pages/NotFound";
@@ -24,6 +25,7 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/treinos" element={<Treinos />} />
             <Route path="/receitas" element={<Receitas />} />
+            <Route path="/comunidade" element={<Comunidade />} />
             <Route path="/progresso" element={<Progresso />} />
             <Route path="/perfil" element={<Perfil />} />
           </Route>
