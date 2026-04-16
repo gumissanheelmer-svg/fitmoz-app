@@ -11,7 +11,14 @@ const HomePage = () => {
   const navigate = useNavigate();
   const { isPro } = usePlan();
   const { profile, loading } = useProfile();
+  const { isAdmin, loading: adminLoading } = useAdmin();
   const [showUpgrade, setShowUpgrade] = useState(false);
+
+  useEffect(() => {
+    if (!adminLoading && isAdmin) {
+      navigate("/admin", { replace: true });
+    }
+  }, [isAdmin, adminLoading, navigate]);
 
   const diasTreinados = profile?.dias_treinados ?? 0;
   const streak = profile?.streak ?? 0;
