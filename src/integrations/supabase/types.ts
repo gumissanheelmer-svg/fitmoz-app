@@ -14,6 +14,30 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_logs: {
+        Row: {
+          action: string
+          admin_id: string
+          created_at: string
+          details: Json | null
+          id: string
+        }
+        Insert: {
+          action: string
+          admin_id: string
+          created_at?: string
+          details?: Json | null
+          id?: string
+        }
+        Update: {
+          action?: string
+          admin_id?: string
+          created_at?: string
+          details?: Json | null
+          id?: string
+        }
+        Relationships: []
+      }
       comments: {
         Row: {
           created_at: string
@@ -144,6 +168,41 @@ export type Database = {
         }
         Relationships: []
       }
+      reports: {
+        Row: {
+          created_at: string
+          id: string
+          motivo: string
+          post_id: string
+          reporter_id: string
+          status: Database["public"]["Enums"]["report_status"]
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          motivo: string
+          post_id: string
+          reporter_id: string
+          status?: Database["public"]["Enums"]["report_status"]
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          motivo?: string
+          post_id?: string
+          reporter_id?: string
+          status?: Database["public"]["Enums"]["report_status"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reports_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           id: string
@@ -178,8 +237,9 @@ export type Database = {
     Enums: {
       app_plan: "plus" | "pro"
       app_role: "admin" | "moderator" | "user"
-      plan_status: "ativo" | "teste" | "expirado"
+      plan_status: "ativo" | "teste" | "expirado" | "pendente" | "rejeitado"
       post_type: "livre" | "progresso" | "pergunta"
+      report_status: "pendente" | "resolvido" | "ignorado"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -309,8 +369,9 @@ export const Constants = {
     Enums: {
       app_plan: ["plus", "pro"],
       app_role: ["admin", "moderator", "user"],
-      plan_status: ["ativo", "teste", "expirado"],
+      plan_status: ["ativo", "teste", "expirado", "pendente", "rejeitado"],
       post_type: ["livre", "progresso", "pergunta"],
+      report_status: ["pendente", "resolvido", "ignorado"],
     },
   },
 } as const
