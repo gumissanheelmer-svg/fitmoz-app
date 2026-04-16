@@ -78,6 +78,7 @@ const App = () => (
             <Route element={<ProtectedRoute><AppLayout /></ProtectedRoute>}>
               <Route path="/" element={<Index />} />
               <Route path="/treinos" element={<Treinos />} />
+              <Route path="/coach" element={<Coach />} />
               <Route path="/receitas" element={<Receitas />} />
               <Route path="/comunidade" element={<Comunidade />} />
               <Route path="/progresso" element={<Progresso />} />
