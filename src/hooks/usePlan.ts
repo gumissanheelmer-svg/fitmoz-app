@@ -3,7 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "./useAuth";
 
 export type Plan = "plus" | "pro";
-export type PlanStatus = "ativo" | "teste" | "expirado";
+export type PlanStatus = "ativo" | "teste" | "expirado" | "pendente" | "rejeitado";
 
 export const usePlan = () => {
   const { user } = useAuth();
