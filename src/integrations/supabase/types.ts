@@ -123,6 +123,27 @@ export type Database = {
           },
         ]
       }
+      motivational_tips: {
+        Row: {
+          created_at: string
+          emoji: string
+          id: string
+          texto: string
+        }
+        Insert: {
+          created_at?: string
+          emoji?: string
+          id?: string
+          texto: string
+        }
+        Update: {
+          created_at?: string
+          emoji?: string
+          id?: string
+          texto?: string
+        }
+        Relationships: []
+      }
       posts: {
         Row: {
           conteudo: string
@@ -198,6 +219,48 @@ export type Database = {
         }
         Relationships: []
       }
+      recipes: {
+        Row: {
+          beneficios: string
+          categoria: Database["public"]["Enums"]["recipe_category"]
+          created_at: string
+          emoji: string
+          id: string
+          ingredientes: string[]
+          min_plan: Database["public"]["Enums"]["app_plan"]
+          modo_preparo: string[]
+          nome: string
+          objetivo: string
+          quando_consumir: string
+        }
+        Insert: {
+          beneficios: string
+          categoria: Database["public"]["Enums"]["recipe_category"]
+          created_at?: string
+          emoji?: string
+          id?: string
+          ingredientes?: string[]
+          min_plan?: Database["public"]["Enums"]["app_plan"]
+          modo_preparo?: string[]
+          nome: string
+          objetivo: string
+          quando_consumir: string
+        }
+        Update: {
+          beneficios?: string
+          categoria?: Database["public"]["Enums"]["recipe_category"]
+          created_at?: string
+          emoji?: string
+          id?: string
+          ingredientes?: string[]
+          min_plan?: Database["public"]["Enums"]["app_plan"]
+          modo_preparo?: string[]
+          nome?: string
+          objetivo?: string
+          quando_consumir?: string
+        }
+        Relationships: []
+      }
       reports: {
         Row: {
           created_at: string
@@ -251,6 +314,75 @@ export type Database = {
         }
         Relationships: []
       }
+      weekly_plans: {
+        Row: {
+          created_at: string
+          descricao: string
+          dias: Json
+          id: string
+          min_plan: Database["public"]["Enums"]["app_plan"]
+          nivel: string
+          nome: string
+        }
+        Insert: {
+          created_at?: string
+          descricao: string
+          dias?: Json
+          id?: string
+          min_plan?: Database["public"]["Enums"]["app_plan"]
+          nivel?: string
+          nome: string
+        }
+        Update: {
+          created_at?: string
+          descricao?: string
+          dias?: Json
+          id?: string
+          min_plan?: Database["public"]["Enums"]["app_plan"]
+          nivel?: string
+          nome?: string
+        }
+        Relationships: []
+      }
+      workouts: {
+        Row: {
+          created_at: string
+          duracao_min: number
+          emoji: string
+          exercicios: Json
+          foco: Database["public"]["Enums"]["workout_focus"]
+          id: string
+          min_plan: Database["public"]["Enums"]["app_plan"]
+          nivel: string
+          nome: string
+          series: number
+        }
+        Insert: {
+          created_at?: string
+          duracao_min: number
+          emoji?: string
+          exercicios?: Json
+          foco: Database["public"]["Enums"]["workout_focus"]
+          id?: string
+          min_plan?: Database["public"]["Enums"]["app_plan"]
+          nivel?: string
+          nome: string
+          series?: number
+        }
+        Update: {
+          created_at?: string
+          duracao_min?: number
+          emoji?: string
+          exercicios?: Json
+          foco?: Database["public"]["Enums"]["workout_focus"]
+          id?: string
+          min_plan?: Database["public"]["Enums"]["app_plan"]
+          nivel?: string
+          nome?: string
+          series?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -269,7 +401,14 @@ export type Database = {
       app_role: "admin" | "moderator" | "user"
       plan_status: "ativo" | "teste" | "expirado" | "pendente" | "rejeitado"
       post_type: "livre" | "progresso" | "pergunta"
+      recipe_category:
+        | "sopa_detox"
+        | "cha"
+        | "refeicao_leve"
+        | "salada"
+        | "suco"
       report_status: "pendente" | "resolvido" | "ignorado"
+      workout_focus: "barriga" | "gluteo" | "pernas" | "corpo_todo" | "cardio"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -401,7 +540,9 @@ export const Constants = {
       app_role: ["admin", "moderator", "user"],
       plan_status: ["ativo", "teste", "expirado", "pendente", "rejeitado"],
       post_type: ["livre", "progresso", "pergunta"],
+      recipe_category: ["sopa_detox", "cha", "refeicao_leve", "salada", "suco"],
       report_status: ["pendente", "resolvido", "ignorado"],
+      workout_focus: ["barriga", "gluteo", "pernas", "corpo_todo", "cardio"],
     },
   },
 } as const

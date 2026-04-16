@@ -1,76 +1,195 @@
 import { useState } from "react";
-import { Clock, ChevronRight, Play } from "lucide-react";
-import PostWorkoutDialog from "@/components/PostWorkoutDialog";
+import { Lock, Clock, Dumbbell, ArrowLeft, Calendar, Sparkles } from "lucide-react";
+import { useWorkouts, useWeeklyPlans, useTips, type Workout } from "@/hooks/useContent";
+import { usePlan } from "@/hooks/usePlan";
+import UpgradeDialog from "@/components/UpgradeDialog";
 
-const levels = ["Iniciante", "Intermediário", "Avançado"] as const;
+const FOCOS = [
+  { id: "todos", label: "Todos", emoji: "💪" },
+  { id: "barriga", label: "Barriga", emoji: "🔥" },
+  { id: "gluteo", label: "Glúteo", emoji: "🍑" },
+  { id: "pernas", label: "Pernas", emoji: "🦵" },
+  { id: "corpo_todo", label: "Corpo todo", emoji: "💃" },
+  { id: "cardio", label: "Cardio", emoji: "🏃‍♀️" },
+] as const;
 
-const workouts = [
-  { id: 1, nivel: "Iniciante", titulo: "Queima Rápida", descricao: "Treino cardio para iniciantes", duracao: "15 min" },
-  { id: 2, nivel: "Iniciante", titulo: "Core Básico", descricao: "Fortalecimento do abdômen", duracao: "10 min" },
-  { id: 3, nivel: "Intermediário", titulo: "Full Body", descricao: "Treino completo de corpo inteiro", duracao: "25 min" },
-  { id: 4, nivel: "Intermediário", titulo: "HIIT Intenso", descricao: "Intervalos de alta intensidade", duracao: "20 min" },
-  { id: 5, nivel: "Avançado", titulo: "Beast Mode", descricao: "Treino extremo para queima máxima", duracao: "35 min" },
-  { id: 6, nivel: "Avançado", titulo: "Tabata Pro", descricao: "Protocolo Tabata avançado", duracao: "30 min" },
-];
+const TreinosPage = () => {
+  const { workouts, loading } = useWorkouts();
+  const { plans } = useWeeklyPlans();
+  const tips = useTips();
+  const { isPro } = usePlan();
+  const [tab, setTab] = useState<"treinos" | "plano">("treinos");
+  const [foco, setFoco] = useState<string>("todos");
+  const [selected, setSelected] = useState<Workout | null>(null);
+  const [showUpgrade, setShowUpgrade] = useState(false);
 
-const Treinos = () => {
-  const [selected, setSelected] = useState<(typeof levels)[number]>("Iniciante");
-  const [showPostWorkout, setShowPostWorkout] = useState(false);
-  const filtered = workouts.filter((w) => w.nivel === selected);
+  const filtered = workouts.filter((w) => foco === "todos" || w.foco === foco);
+  const tip = tips[Math.floor(Date.now() / 86400000) % Math.max(tips.length, 1)];
 
-  const handleStartWorkout = () => {
-    // Simulate completing a workout
-    setShowPostWorkout(true);
+  const open = (w: Workout) => {
+    if (w.min_plan === "pro" && !isPro) {
+      setShowUpgrade(true);
+      return;
+    }
+    setSelected(w);
   };
 
+  if (loading) {
+    return (
+      <div className="flex min-h-[60vh] items-center justify-center">
+        <div className="h-10 w-10 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+      </div>
+    );
+  }
+
+  if (selected) {
+    return (
+      <div className="animate-fade-in pb-6">
+        <div className="sticky top-0 z-10 flex items-center gap-3 border-b border-border bg-card px-4 py-3">
+          <button onClick={() => setSelected(null)} className="rounded-full p-1 hover:bg-muted">
+            <ArrowLeft className="h-5 w-5" />
+          </button>
+          <h1 className="font-bold text-foreground">{selected.nome}</h1>
+        </div>
+        <div className="p-4 space-y-5">
+          <div className="rounded-2xl bg-gradient-to-br from-primary to-primary/70 p-6 text-center text-primary-foreground">
+            <div className="text-5xl mb-2">{selected.emoji}</div>
+            <div className="flex justify-center gap-4 text-xs mt-2">
+              <span className="flex items-center gap-1"><Clock className="h-3 w-3" />{selected.duracao_min} min</span>
+              <span className="flex items-center gap-1"><Dumbbell className="h-3 w-3" />{selected.series} séries</span>
+              <span className="capitalize">• {selected.nivel}</span>
+            </div>
+          </div>
+          <div>
+            <h2 className="text-sm font-bold text-foreground mb-2">Exercícios</h2>
+            <div className="space-y-2">
+              {selected.exercicios.map((ex, idx) => (
+                <div key={idx} className="flex items-center justify-between rounded-xl border border-border bg-card p-4">
+                  <div className="flex items-center gap-3">
+                    <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">{idx + 1}</span>
+                    <span className="text-sm font-medium text-foreground">{ex.nome}</span>
+                  </div>
+                  <span className="text-xs font-semibold text-primary">{ex.reps || ex.tempo}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="rounded-xl border border-primary/20 bg-primary/5 p-4 text-center">
+            <p className="text-sm font-medium text-foreground">💡 Faça {selected.series} séries completas com 30s de descanso entre elas</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="animate-fade-in space-y-5 p-5">
-      <div className="pt-2">
-        <h1 className="text-2xl font-extrabold text-foreground">Treinos</h1>
-        <p className="text-sm text-muted-foreground">Escolha seu nível e comece agora</p>
-      </div>
-
-      {/* Level Tabs */}
-      <div className="flex gap-2">
-        {levels.map((level) => (
+    <div className="animate-fade-in pb-6">
+      <div className="bg-card px-4 py-4 border-b border-border">
+        <h1 className="text-xl font-bold text-foreground">Treinos 💪</h1>
+        {tip && (
+          <div className="mt-3 flex items-start gap-2 rounded-xl bg-primary/5 p-3">
+            <Sparkles className="h-4 w-4 shrink-0 text-primary mt-0.5" />
+            <p className="text-xs text-foreground">{tip.texto} {tip.emoji}</p>
+          </div>
+        )}
+        <div className="mt-3 flex gap-2">
           <button
-            key={level}
-            onClick={() => setSelected(level)}
-            className={`rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
-              selected === level
-                ? "bg-primary text-primary-foreground"
-                : "bg-secondary text-secondary-foreground"
-            }`}
+            onClick={() => setTab("treinos")}
+            className={`flex-1 rounded-full py-2 text-xs font-semibold ${tab === "treinos" ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"}`}
           >
-            {level}
+            Treinos
           </button>
-        ))}
-      </div>
-
-      {/* Workout List */}
-      <div className="space-y-3">
-        {filtered.map((w) => (
           <button
-            key={w.id}
-            onClick={handleStartWorkout}
-            className="animate-slide-up flex w-full items-center gap-4 rounded-xl border border-border bg-card p-4 text-left transition-colors hover:bg-muted"
+            onClick={() => setTab("plano")}
+            className={`flex-1 rounded-full py-2 text-xs font-semibold ${tab === "plano" ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"}`}
           >
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-secondary">
-              <Clock className="h-5 w-5 text-primary" />
-            </div>
-            <div className="flex-1">
-              <p className="font-bold text-foreground">{w.titulo}</p>
-              <p className="text-sm text-muted-foreground">{w.descricao}</p>
-              <p className="mt-1 text-xs font-semibold text-primary">{w.duracao}</p>
-            </div>
-            <Play className="h-5 w-5 text-primary" fill="currentColor" />
+            Plano 7 Dias
           </button>
-        ))}
+        </div>
       </div>
 
-      <PostWorkoutDialog open={showPostWorkout} onOpenChange={setShowPostWorkout} />
+      {tab === "treinos" ? (
+        <>
+          <div className="flex gap-2 overflow-x-auto px-4 py-3">
+            {FOCOS.map((f) => (
+              <button
+                key={f.id}
+                onClick={() => setFoco(f.id)}
+                className={`flex shrink-0 items-center gap-1.5 rounded-full px-4 py-1.5 text-xs font-medium ${
+                  foco === f.id ? "bg-primary text-primary-foreground" : "bg-card text-foreground border border-border"
+                }`}
+              >
+                <span>{f.emoji}</span>{f.label}
+              </button>
+            ))}
+          </div>
+          <div className="space-y-3 px-4">
+            {filtered.map((w) => {
+              const locked = w.min_plan === "pro" && !isPro;
+              return (
+                <button
+                  key={w.id}
+                  onClick={() => open(w)}
+                  className="relative flex w-full items-center gap-4 rounded-2xl border border-border bg-card p-4 text-left transition-transform hover:scale-[1.01]"
+                >
+                  <div className="text-3xl">{w.emoji}</div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-bold text-foreground">{w.nome}</p>
+                    <div className="mt-1 flex gap-3 text-[11px] text-muted-foreground">
+                      <span className="flex items-center gap-1"><Clock className="h-3 w-3" />{w.duracao_min} min</span>
+                      <span className="capitalize">{w.nivel}</span>
+                    </div>
+                  </div>
+                  {locked && (
+                    <div className="flex items-center gap-1 rounded-full bg-primary px-2 py-1 text-[10px] font-bold text-primary-foreground">
+                      <Lock className="h-2.5 w-2.5" />PRO
+                    </div>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        </>
+      ) : (
+        <div className="px-4 py-3 space-y-4">
+          {plans.map((p) => (
+            <div key={p.id} className="rounded-2xl border border-border bg-card overflow-hidden">
+              <div className="bg-gradient-to-br from-primary to-primary/70 p-4 text-primary-foreground">
+                <div className="flex items-center gap-2">
+                  <Calendar className="h-5 w-5" />
+                  <h2 className="font-bold">{p.nome}</h2>
+                </div>
+                <p className="text-xs mt-1 opacity-90">{p.descricao}</p>
+              </div>
+              <div className="divide-y divide-border">
+                {p.dias.map((d) => (
+                  <div key={d.dia} className="p-4">
+                    <div className="flex items-center gap-2">
+                      <span className="flex h-7 w-7 items-center justify-center rounded-full bg-primary text-xs font-bold text-primary-foreground">{d.dia}</span>
+                      <h3 className="text-sm font-bold text-foreground">{d.titulo}</h3>
+                    </div>
+                    <div className="mt-2 ml-9 space-y-1 text-xs text-foreground">
+                      <p><span className="font-semibold text-primary">🏋️ Treino:</span> {d.treino}</p>
+                      <p><span className="font-semibold text-primary">☀️ Manhã:</span> {d.receita_manha}</p>
+                      <p><span className="font-semibold text-primary">🌤️ Almoço:</span> {d.receita_almoco}</p>
+                      <p><span className="font-semibold text-primary">🌙 Jantar:</span> {d.receita_jantar}</p>
+                      <p className="mt-2 italic text-muted-foreground">{d.dica}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <UpgradeDialog
+        open={showUpgrade}
+        onOpenChange={setShowUpgrade}
+        message="Este treino é exclusivo PRO. Desbloqueie treinos intermediários e avançados."
+      />
     </div>
   );
 };
 
-export default Treinos;
+export default TreinosPage;
