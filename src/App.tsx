@@ -8,6 +8,7 @@ import { useAdmin } from "@/hooks/useAdmin";
 import AppLayout from "./components/AppLayout";
 import AdminLayout from "./components/admin/AdminLayout";
 import Index from "./pages/Index";
+import Coach from "./pages/Coach";
 import Treinos from "./pages/Treinos";
 import Receitas from "./pages/Receitas";
 import Comunidade from "./pages/Comunidade";
@@ -77,6 +78,7 @@ const App = () => (
             <Route element={<ProtectedRoute><AppLayout /></ProtectedRoute>}>
               <Route path="/" element={<Index />} />
               <Route path="/treinos" element={<Treinos />} />
+              <Route path="/coach" element={<Coach />} />
               <Route path="/receitas" element={<Receitas />} />
               <Route path="/comunidade" element={<Comunidade />} />
               <Route path="/progresso" element={<Progresso />} />

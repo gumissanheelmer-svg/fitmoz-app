@@ -38,6 +38,30 @@ export type Database = {
         }
         Relationships: []
       }
+      chat_messages: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          role: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          role: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          role?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       comments: {
         Row: {
           created_at: string
@@ -131,7 +155,9 @@ export type Database = {
           email: string | null
           expira_em: string | null
           id: string
+          nivel: string
           nome: string
+          objetivo: string
           plano: Database["public"]["Enums"]["app_plan"]
           status: Database["public"]["Enums"]["plan_status"]
           streak: number
@@ -145,7 +171,9 @@ export type Database = {
           email?: string | null
           expira_em?: string | null
           id?: string
+          nivel?: string
           nome?: string
+          objetivo?: string
           plano?: Database["public"]["Enums"]["app_plan"]
           status?: Database["public"]["Enums"]["plan_status"]
           streak?: number
@@ -159,7 +187,9 @@ export type Database = {
           email?: string | null
           expira_em?: string | null
           id?: string
+          nivel?: string
           nome?: string
+          objetivo?: string
           plano?: Database["public"]["Enums"]["app_plan"]
           status?: Database["public"]["Enums"]["plan_status"]
           streak?: number
