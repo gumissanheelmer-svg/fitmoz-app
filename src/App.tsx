@@ -8,6 +8,7 @@ import { useAdmin } from "@/hooks/useAdmin";
 import AppLayout from "./components/AppLayout";
 import AdminLayout from "./components/admin/AdminLayout";
 import Index from "./pages/Index";
+import Coach from "./pages/Coach";
 import Treinos from "./pages/Treinos";
 import Receitas from "./pages/Receitas";
 import Comunidade from "./pages/Comunidade";

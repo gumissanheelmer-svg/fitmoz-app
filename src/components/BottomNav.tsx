@@ -1,11 +1,10 @@
-import { Home, Dumbbell, UtensilsCrossed, Users, BarChart3, User } from "lucide-react";
+import { Home, Dumbbell, UtensilsCrossed, Bot, BarChart3, User } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const navItems = [
   { path: "/", icon: Home, label: "Home" },
   { path: "/treinos", icon: Dumbbell, label: "Treinos" },
-  { path: "/receitas", icon: UtensilsCrossed, label: "Receitas" },
-  { path: "/comunidade", icon: Users, label: "Comunidade" },
+  { path: "/coach", icon: Bot, label: "Coach" },
   { path: "/progresso", icon: BarChart3, label: "Progresso" },
   { path: "/perfil", icon: User, label: "Perfil" },
 ];
