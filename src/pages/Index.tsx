@@ -2,14 +2,20 @@ import { Play, Users, Flame, Trophy, Zap } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Progress } from "@/components/ui/progress";
 import { usePlan } from "@/hooks/usePlan";
+import { useProfile } from "@/hooks/useProfile";
 import { useState } from "react";
 import UpgradeDialog from "@/components/UpgradeDialog";
 
 const HomePage = () => {
   const navigate = useNavigate();
   const { isPro } = usePlan();
+  const { profile, loading } = useProfile();
   const [showUpgrade, setShowUpgrade] = useState(false);
-  const currentDay = 3;
+
+  const diasTreinados = profile?.dias_treinados ?? 0;
+  const streak = profile?.streak ?? 0;
+  const nome = profile?.nome || "Atleta";
+  const currentDay = diasTreinados > 0 ? Math.min(diasTreinados, 30) : 1;
   const totalDays = 30;
   const progress = (currentDay / totalDays) * 100;
 
@@ -25,7 +31,9 @@ const HomePage = () => {
     <div className="animate-fade-in space-y-6 p-5">
       {/* Header */}
       <div className="pt-2">
-        <p className="text-sm font-medium text-muted-foreground">Olá, Atleta 💪</p>
+        <p className="text-sm font-medium text-muted-foreground">
+          Olá, {loading ? "..." : nome} 💪
+        </p>
         <h1 className="text-2xl font-extrabold text-foreground">FitMoz</h1>
       </div>
 
@@ -55,9 +63,9 @@ const HomePage = () => {
       {/* Stats Row */}
       <div className="grid grid-cols-3 gap-3">
         {[
-          { icon: Flame, label: "Calorias", value: "450" },
-          { icon: Trophy, label: "Streak", value: "3 dias" },
-          { icon: Zap, label: "Treinos", value: "12" },
+          { icon: Flame, label: "Calorias", value: String(diasTreinados * 150) },
+          { icon: Trophy, label: "Streak", value: `${streak} dias` },
+          { icon: Zap, label: "Treinos", value: String(diasTreinados) },
         ].map(({ icon: Icon, label, value }) => (
           <div key={label} className="animate-slide-up rounded-xl bg-secondary p-4 text-center">
             <Icon className="mx-auto mb-1 h-5 w-5 text-primary" />
