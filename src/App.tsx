@@ -58,7 +58,9 @@ const AdminRoute = ({ children }: { children: React.ReactNode }) => {
 
 const AuthRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, loading } = useAuth();
-  if (loading) return null;
+  const { isAdmin, loading: adminLoading } = useAdmin();
+  if (loading || (user && adminLoading)) return null;
+  if (user && isAdmin) return <Navigate to="/admin" replace />;
   if (user) return <Navigate to="/" replace />;
   return <>{children}</>;
 };

@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { Progress } from "@/components/ui/progress";
 import { usePlan } from "@/hooks/usePlan";
 import { useProfile } from "@/hooks/useProfile";
-import { useState } from "react";
+import { useAdmin } from "@/hooks/useAdmin";
+import { useState, useEffect } from "react";
 import UpgradeDialog from "@/components/UpgradeDialog";
 
 const HomePage = () => {
