@@ -14,6 +14,53 @@ export type Database = {
   }
   public: {
     Tables: {
+      activation_codes: {
+        Row: {
+          codigo: string
+          created_at: string
+          created_by: string | null
+          dias: number
+          id: string
+          payment_id: string | null
+          plano: Database["public"]["Enums"]["app_plan"]
+          usado: boolean
+          used_at: string | null
+          used_by: string | null
+        }
+        Insert: {
+          codigo: string
+          created_at?: string
+          created_by?: string | null
+          dias?: number
+          id?: string
+          payment_id?: string | null
+          plano: Database["public"]["Enums"]["app_plan"]
+          usado?: boolean
+          used_at?: string | null
+          used_by?: string | null
+        }
+        Update: {
+          codigo?: string
+          created_at?: string
+          created_by?: string | null
+          dias?: number
+          id?: string
+          payment_id?: string | null
+          plano?: Database["public"]["Enums"]["app_plan"]
+          usado?: boolean
+          used_at?: string | null
+          used_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "activation_codes_payment_id_fkey"
+            columns: ["payment_id"]
+            isOneToOne: false
+            referencedRelation: "payments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       admin_logs: {
         Row: {
           action: string
@@ -141,6 +188,63 @@ export type Database = {
           emoji?: string
           id?: string
           texto?: string
+        }
+        Relationships: []
+      }
+      payments: {
+        Row: {
+          comprovativo_url: string | null
+          confirmed_at: string | null
+          confirmed_by: string | null
+          created_at: string
+          id: string
+          metodo: string | null
+          nome: string
+          observacao: string | null
+          origem: Database["public"]["Enums"]["payment_source"]
+          plano: Database["public"]["Enums"]["app_plan"]
+          referencia: string | null
+          status: Database["public"]["Enums"]["payment_status"]
+          telefone: string
+          updated_at: string
+          user_id: string | null
+          valor: number
+        }
+        Insert: {
+          comprovativo_url?: string | null
+          confirmed_at?: string | null
+          confirmed_by?: string | null
+          created_at?: string
+          id?: string
+          metodo?: string | null
+          nome: string
+          observacao?: string | null
+          origem?: Database["public"]["Enums"]["payment_source"]
+          plano: Database["public"]["Enums"]["app_plan"]
+          referencia?: string | null
+          status?: Database["public"]["Enums"]["payment_status"]
+          telefone: string
+          updated_at?: string
+          user_id?: string | null
+          valor: number
+        }
+        Update: {
+          comprovativo_url?: string | null
+          confirmed_at?: string | null
+          confirmed_by?: string | null
+          created_at?: string
+          id?: string
+          metodo?: string | null
+          nome?: string
+          observacao?: string | null
+          origem?: Database["public"]["Enums"]["payment_source"]
+          plano?: Database["public"]["Enums"]["app_plan"]
+          referencia?: string | null
+          status?: Database["public"]["Enums"]["payment_status"]
+          telefone?: string
+          updated_at?: string
+          user_id?: string | null
+          valor?: number
         }
         Relationships: []
       }
@@ -399,6 +503,8 @@ export type Database = {
     Enums: {
       app_plan: "plus" | "pro"
       app_role: "admin" | "moderator" | "user"
+      payment_source: "app" | "whatsapp" | "manual"
+      payment_status: "pendente" | "confirmado" | "rejeitado"
       plan_status: "ativo" | "teste" | "expirado" | "pendente" | "rejeitado"
       post_type: "livre" | "progresso" | "pergunta"
       recipe_category:
@@ -538,6 +644,8 @@ export const Constants = {
     Enums: {
       app_plan: ["plus", "pro"],
       app_role: ["admin", "moderator", "user"],
+      payment_source: ["app", "whatsapp", "manual"],
+      payment_status: ["pendente", "confirmado", "rejeitado"],
       plan_status: ["ativo", "teste", "expirado", "pendente", "rejeitado"],
       post_type: ["livre", "progresso", "pergunta"],
       recipe_category: ["sopa_detox", "cha", "refeicao_leve", "salada", "suco"],
