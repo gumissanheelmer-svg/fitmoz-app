@@ -1,4 +1,4 @@
-import { LayoutDashboard, Users, MessageSquare, AlertTriangle, FileText, Settings, LogOut } from "lucide-react";
+import { LayoutDashboard, Users, MessageSquare, AlertTriangle, FileText, Settings, LogOut, CreditCard } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
 import {
@@ -16,6 +16,7 @@ import { useAuth } from "@/hooks/useAuth";
 const items = [
   { title: "Dashboard", url: "/admin", icon: LayoutDashboard },
   { title: "Usuários", url: "/admin/usuarios", icon: Users },
+  { title: "Pagamentos", url: "/admin/pagamentos", icon: CreditCard },
   { title: "Comunidade", url: "/admin/comunidade", icon: MessageSquare },
   { title: "Denúncias", url: "/admin/denuncias", icon: AlertTriangle },
   { title: "Logs", url: "/admin/logs", icon: FileText },
