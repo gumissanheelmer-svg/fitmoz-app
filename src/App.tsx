@@ -14,6 +14,8 @@ import Receitas from "./pages/Receitas";
 import Comunidade from "./pages/Comunidade";
 import Progresso from "./pages/Progresso";
 import Perfil from "./pages/Perfil";
+import Configuracoes from "./pages/Configuracoes";
+import Privacidade from "./pages/Privacidade";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 import Dashboard from "./pages/admin/Dashboard";
@@ -83,6 +85,8 @@ const App = () => (
               <Route path="/comunidade" element={<Comunidade />} />
               <Route path="/progresso" element={<Progresso />} />
               <Route path="/perfil" element={<Perfil />} />
+              <Route path="/configuracoes" element={<Configuracoes />} />
+              <Route path="/privacidade" element={<Privacidade />} />
             </Route>
             <Route element={<AdminRoute><AdminLayout /></AdminRoute>}>
               <Route path="/admin" element={<Dashboard />} />

@@ -90,8 +90,8 @@ const Perfil = () => {
 
       <div className="space-y-1">
         {[
-          { icon: Settings, label: "Configurações", action: () => {} },
-          { icon: Shield, label: "Privacidade", action: () => {} },
+          { icon: Settings, label: "Configurações", action: () => navigate("/configuracoes") },
+          { icon: Shield, label: "Privacidade", action: () => navigate("/privacidade") },
           { icon: LogOut, label: "Sair", action: handleSignOut },
         ].map(({ icon: Icon, label, action }) => (
           <button
