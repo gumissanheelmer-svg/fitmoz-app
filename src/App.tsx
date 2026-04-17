@@ -16,11 +16,14 @@ import Progresso from "./pages/Progresso";
 import Perfil from "./pages/Perfil";
 import Configuracoes from "./pages/Configuracoes";
 import Privacidade from "./pages/Privacidade";
+import Pagamento from "./pages/Pagamento";
+import Ativar from "./pages/Ativar";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 import Dashboard from "./pages/admin/Dashboard";
 import Usuarios from "./pages/admin/Usuarios";
 import AdminComunidade from "./pages/admin/Comunidade";
+import AdminPagamentos from "./pages/admin/Pagamentos";
 import Denuncias from "./pages/admin/Denuncias";
 import Logs from "./pages/admin/Logs";
 import Config from "./pages/admin/Config";
@@ -87,11 +90,14 @@ const App = () => (
               <Route path="/perfil" element={<Perfil />} />
               <Route path="/configuracoes" element={<Configuracoes />} />
               <Route path="/privacidade" element={<Privacidade />} />
+              <Route path="/pagamento" element={<Pagamento />} />
+              <Route path="/ativar" element={<Ativar />} />
             </Route>
             <Route element={<AdminRoute><AdminLayout /></AdminRoute>}>
               <Route path="/admin" element={<Dashboard />} />
               <Route path="/admin/usuarios" element={<Usuarios />} />
               <Route path="/admin/comunidade" element={<AdminComunidade />} />
+              <Route path="/admin/pagamentos" element={<AdminPagamentos />} />
               <Route path="/admin/denuncias" element={<Denuncias />} />
               <Route path="/admin/logs" element={<Logs />} />
               <Route path="/admin/config" element={<Config />} />

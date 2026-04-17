@@ -6,7 +6,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { Lock } from "lucide-react";
-import { usePlan } from "@/hooks/usePlan";
+import { useNavigate } from "react-router-dom";
 
 interface UpgradeDialogProps {
   open: boolean;
@@ -15,11 +15,11 @@ interface UpgradeDialogProps {
 }
 
 const UpgradeDialog = ({ open, onOpenChange, message }: UpgradeDialogProps) => {
-  const { setPlan } = usePlan();
+  const navigate = useNavigate();
 
   const handleUpgrade = () => {
-    setPlan("pro");
     onOpenChange(false);
+    navigate("/pagamento");
   };
 
   return (

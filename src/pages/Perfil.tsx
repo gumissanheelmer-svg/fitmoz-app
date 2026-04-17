@@ -1,4 +1,4 @@
-import { Crown, Star, ChevronRight, LogOut, Settings, Shield, Calendar } from "lucide-react";
+import { Crown, Star, ChevronRight, LogOut, Settings, Shield, Calendar, KeyRound } from "lucide-react";
 import { usePlan } from "@/hooks/usePlan";
 import { useProfile } from "@/hooks/useProfile";
 import { useAuth } from "@/hooks/useAuth";
@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 const Perfil = () => {
-  const { plan, setPlan, status, expiresAt } = usePlan();
+  const { plan, status, expiresAt } = usePlan();
   const { profile, loading } = useProfile();
   const { signOut } = useAuth();
   const navigate = useNavigate();
@@ -68,7 +68,7 @@ const Perfil = () => {
 
         {plan === "plus" && (
           <button
-            onClick={() => setPlan("pro")}
+            onClick={() => navigate("/pagamento")}
             className="mt-4 w-full rounded-xl bg-primary px-6 py-3.5 text-sm font-bold text-primary-foreground transition-transform active:scale-[0.98]"
           >
             Atualizar para PRO — 147 MZN
@@ -90,6 +90,7 @@ const Perfil = () => {
 
       <div className="space-y-1">
         {[
+          { icon: KeyRound, label: "Ativar código", action: () => navigate("/ativar") },
           { icon: Settings, label: "Configurações", action: () => navigate("/configuracoes") },
           { icon: Shield, label: "Privacidade", action: () => navigate("/privacidade") },
           { icon: LogOut, label: "Sair", action: handleSignOut },
