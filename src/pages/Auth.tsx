@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Dumbbell, Mail, Lock, User, Eye, EyeOff } from "lucide-react";
+import { Mail, Lock, User, Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
+import fitmozLogo from "@/assets/fitmoz-logo.png";
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -42,10 +43,11 @@ const Auth = () => {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-background p-6">
       <div className="mb-8 flex flex-col items-center gap-2">
-        <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary">
-          <Dumbbell className="h-8 w-8 text-primary-foreground" />
-        </div>
-        <h1 className="text-3xl font-extrabold text-foreground">FitMoz</h1>
+        <img
+          src={fitmozLogo}
+          alt="FitMoz — Seu app de treinos"
+          className="h-32 w-32 object-contain"
+        />
         <p className="text-sm text-muted-foreground">
           {isLogin ? "Entre na sua conta" : "Crie sua conta gratuita"}
         </p>
